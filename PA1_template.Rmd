@@ -73,6 +73,49 @@ which.max(steps_per_int)[[1]]
 
 ## Imputing missing values
 
+The number of missing values is given by:
+```{r}
+sum(is.na(step_data$steps))
+```
+
+
+All missing data will be imputed by substitution, 
+at the appropriate interval value, of 
+the number of steps per interval averaged over all days 
+with the following code:
+```{r}
+step_data_noNA <- step_data
+for(i in seq(1,length(steps_per_int))) {
+    step_data_noNA[is.na(step_data$steps) 
+               & 
+               as.character(step_data_noNA$interval) 
+                   == row.names(as.matrix(steps_per_int))[i]
+              ,1] <- as.matrix(steps_per_int)[i]
+}
+
+sum(is.na(step_data_noNA$steps))
+```
+
+A histogram of the number of steps per day is given below, and 
+using the following code:
+```{r}
+day_factor_noNA <- as.factor(step_data_noNA$date)
+steps_per_day_noNA <- tapply(step_data_noNA$steps, day_factor_noNA, sum)
+barplot(steps_per_day_noNA)
+```
+
+
+The mean of the total number of steps per day is given here:
+```{r}
+mean(steps_per_day_noNA)
+```
+
+The median is given below:
+```{r}
+median(steps_per_day_noNA)
+```
+
+Offhand, the differences do not appear to be significant.  
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
