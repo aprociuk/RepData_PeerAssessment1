@@ -119,3 +119,21 @@ Offhand, the differences do not appear to be significant.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+The following is the code that creates the data set with the 
+weekday/weekend factor group and generates averages to be 
+plotted:
+
+```{r}
+step_data_noNA$day <- weekdays(as.POSIXlt(step_data_noNA$date))
+step_data_noNA$day[
+                    step_data_noNA$day=="Saturday" 
+                    | 
+                    step_data_noNA$day=="Sunday"
+                  ] <- "weekend"
+step_data_noNA$day[step_data_noNA$day!="weekend"] <- "weekday"
+step_data_noNA$day <- as.factor(step_data_noNA$day)
+str(step_data_noNA)
+```
+
+
